@@ -5,6 +5,7 @@ import tkinter as tk
 
 from tkinter.ttk import Frame
 from tkinter import messagebox
+from multiprocessing import Pool
 
 
 ROOT_WIDTH = 800  # width for the Tk root
@@ -113,20 +114,23 @@ class Application(Frame):
 
     @_validate_input
     def find_forward_dns(self, data):
-        result = map(get_forward_dns, data)
-        final = "\n".join(i for i in result)
+        with Pool() as p:
+            result = p.map(get_forward_dns, data)
+        final = "\n".join(result)
         self._insert_data(final)
 
     @_validate_input
     def find_backward_dns(self, data):
-        result = map(get_reverse_dns, data)
-        final = "\n".join(i for i in result)
+        with Pool() as p:
+            result = p.map(get_reverse_dns, data)
+        final = "\n".join(result)
         self._insert_data(final)
 
     @_validate_input
     def find_ping(self, data):
-        result = map(find_ping_response, data)
-        final = "\n".join(i for i in result)
+        with Pool() as p:
+            result = p.map(find_ping_response, data)
+        final = "\n".join(result)
         self._insert_data(final)
 
 
